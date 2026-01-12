@@ -9,6 +9,10 @@ export const createInventorySchema = z.object({
 export const updateInventorySchema = z.object({
   name: z.string().min(1).optional(),
   description: z.string().optional(),
-  visibility: z.enum(['private', 'public']).optional(),
-  publicAccess: z.object({ enabled: z.boolean(), allowPublicEdit: z.boolean() }).optional()
+  visibility: z.enum(['private', 'public']).optional()
+});
+
+export const publicAccessSchema = z.object({
+  allowPublicEdit: z.boolean().optional(),
+  visibility: z.enum(["private", "public"]).optional(),
 });

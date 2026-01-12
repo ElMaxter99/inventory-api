@@ -37,7 +37,9 @@ const ItemSchema = new Schema(
     attributes: { type: Schema.Types.Mixed },
     aiSuggestion: AiSuggestionSchema,
     createdByUserId: { type: Schema.Types.ObjectId, ref: 'User' },
-    updatedByUserId: { type: Schema.Types.ObjectId, ref: 'User' }
+    updatedByUserId: { type: Schema.Types.ObjectId, ref: 'User' },
+    updatedByPublic: { type: Boolean, default: false },
+    updatedByActor: { type: String }
   },
   { timestamps: true }
 );

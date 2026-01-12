@@ -79,14 +79,17 @@ export async function logoutRefresh(userId: Types.ObjectId, refreshToken?: strin
   if (!refreshToken) {
     user.refreshTokens = [];
   } else {
-    user.refreshTokens = user.refreshTokens.filter((t: any) => {
+    const filtered = [];
+    for (const token of user.refreshTokens) {
       try {
-        // remove the one matching
-        return !compareToken(refreshToken, t.tokenHash);
+        // eslint-disable-next-line no-await-in-loop
+        const matches = await compareToken(refreshToken, token.tokenHash);
+        if (!matches) filtered.push(token);
       } catch {
-        return true;
+        filtered.push(token);
       }
-    });
+    }
+    user.refreshTokens = filtered;
   }
   await user.save();
 }

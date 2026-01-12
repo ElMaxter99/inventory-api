@@ -3,7 +3,7 @@ import Item from "../models/item.model";
 import DummyAiProvider from "../utils/aiProvider";
 
 export async function suggest(req: Request, res: Response) {
-  const itemId = req.params.itemId;
+  const itemId = (req as any).item?._id || req.params.itemId;
   const item = await Item.findById(itemId);
   if (!item)
     return res

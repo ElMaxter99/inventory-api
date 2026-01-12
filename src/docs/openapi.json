@@ -2,45 +2,188 @@
   "openapi": "3.0.0",
   "info": {
     "title": "Inventory API",
-    "version": "0.1.0"
+    "version": "0.2.0",
+    "description": "API REST para inventarios personales"
   },
   "servers": [
     {
       "url": "/api/v1"
     }
   ],
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  },
   "paths": {
     "/auth/register": {
       "post": {
         "summary": "Registro",
         "requestBody": {
+          "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "type": "object"
+                "type": "object",
+                "properties": {
+                  "email": { "type": "string" },
+                  "password": { "type": "string" },
+                  "name": { "type": "string" }
+                }
+              },
+              "example": {
+                "email": "user@example.com",
+                "password": "password123",
+                "name": "User"
               }
             }
           }
         },
         "responses": {
-          "201": {
-            "description": "Created"
-          }
+          "201": { "description": "Created" }
         }
       }
     },
     "/auth/login": {
       "post": {
-        "summary": "Login"
+        "summary": "Login",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": { "type": "string" },
+                  "password": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Tokens" }
+        }
+      }
+    },
+    "/auth/refresh": {
+      "post": {
+        "summary": "Rotar refresh token",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "type": "object", "properties": { "refreshToken": { "type": "string" } } }
+            }
+          }
+        },
+        "responses": { "200": { "description": "Tokens" } }
+      }
+    },
+    "/auth/logout": {
+      "post": {
+        "summary": "Logout",
+        "responses": { "200": { "description": "OK" } }
+      }
+    },
+    "/auth/me": {
+      "get": {
+        "summary": "Perfil",
+        "security": [{ "bearerAuth": [] }],
+        "responses": { "200": { "description": "Me" } }
       }
     },
     "/inventories": {
       "post": {
-        "summary": "Crear inventario"
+        "summary": "Crear inventario",
+        "security": [{ "bearerAuth": [] }],
+        "responses": { "201": { "description": "Created" } }
       },
       "get": {
-        "summary": "Listar inventarios del usuario"
+        "summary": "Listar inventarios",
+        "security": [{ "bearerAuth": [] }],
+        "responses": { "200": { "description": "List" } }
       }
+    },
+    "/inventories/{id}": {
+      "get": { "summary": "Get inventory", "security": [{ "bearerAuth": [] }], "responses": { "200": { "description": "OK" } } },
+      "patch": { "summary": "Update inventory", "security": [{ "bearerAuth": [] }], "responses": { "200": { "description": "OK" } } },
+      "delete": { "summary": "Delete inventory", "security": [{ "bearerAuth": [] }], "responses": { "200": { "description": "OK" } } }
+    },
+    "/inventories/{id}/members": {
+      "post": { "summary": "Add member", "security": [{ "bearerAuth": [] }], "responses": { "201": { "description": "Created" } } }
+    },
+    "/inventories/{id}/members/{memberId}": {
+      "patch": { "summary": "Update member", "security": [{ "bearerAuth": [] }], "responses": { "200": { "description": "OK" } } },
+      "delete": { "summary": "Remove member", "security": [{ "bearerAuth": [] }], "responses": { "200": { "description": "OK" } } }
+    },
+    "/inventories/{id}/public/enable": {
+      "post": { "summary": "Enable public", "security": [{ "bearerAuth": [] }], "responses": { "200": { "description": "OK" } } }
+    },
+    "/inventories/{id}/public/disable": {
+      "post": { "summary": "Disable public", "security": [{ "bearerAuth": [] }], "responses": { "200": { "description": "OK" } } }
+    },
+    "/inventories/{id}/public": {
+      "patch": { "summary": "Update public settings", "security": [{ "bearerAuth": [] }], "responses": { "200": { "description": "OK" } } }
+    },
+    "/inventories/{id}/zones": {
+      "post": { "summary": "Create zone", "security": [{ "bearerAuth": [] }], "responses": { "201": { "description": "Created" } } },
+      "get": { "summary": "List zones", "security": [{ "bearerAuth": [] }], "responses": { "200": { "description": "OK" } } }
+    },
+    "/inventories/{id}/zones/{zoneId}": {
+      "get": { "summary": "Get zone", "security": [{ "bearerAuth": [] }], "responses": { "200": { "description": "OK" } } },
+      "patch": { "summary": "Update zone", "security": [{ "bearerAuth": [] }], "responses": { "200": { "description": "OK" } } },
+      "delete": { "summary": "Delete zone", "security": [{ "bearerAuth": [] }], "responses": { "200": { "description": "OK" } } }
+    },
+    "/inventories/{id}/zones/reorder": {
+      "patch": { "summary": "Reorder zones", "security": [{ "bearerAuth": [] }], "responses": { "200": { "description": "OK" } } }
+    },
+    "/inventories/{id}/items": {
+      "post": { "summary": "Create item", "security": [{ "bearerAuth": [] }], "responses": { "201": { "description": "Created" } } },
+      "get": { "summary": "List items", "security": [{ "bearerAuth": [] }], "responses": { "200": { "description": "OK" } } }
+    },
+    "/inventories/{id}/items/{itemId}": {
+      "get": { "summary": "Get item", "security": [{ "bearerAuth": [] }], "responses": { "200": { "description": "OK" } } },
+      "patch": { "summary": "Update item", "security": [{ "bearerAuth": [] }], "responses": { "200": { "description": "OK" } } },
+      "delete": { "summary": "Delete item", "security": [{ "bearerAuth": [] }], "responses": { "200": { "description": "OK" } } }
+    },
+    "/inventories/{id}/items/{itemId}/comments": {
+      "post": { "summary": "Add comment", "security": [{ "bearerAuth": [] }], "responses": { "201": { "description": "Created" } } }
+    },
+    "/inventories/{id}/items/{itemId}/comments/{commentId}": {
+      "delete": { "summary": "Delete comment", "security": [{ "bearerAuth": [] }], "responses": { "200": { "description": "OK" } } }
+    },
+    "/inventories/{id}/items/{itemId}/photos": {
+      "post": { "summary": "Upload photo", "security": [{ "bearerAuth": [] }], "responses": { "201": { "description": "Created" } } }
+    },
+    "/inventories/{id}/items/{itemId}/photos/{photoId}": {
+      "delete": { "summary": "Delete photo", "security": [{ "bearerAuth": [] }], "responses": { "200": { "description": "OK" } } }
+    },
+    "/inventories/{id}/items/{itemId}/ai/suggest": {
+      "post": { "summary": "AI suggest", "security": [{ "bearerAuth": [] }], "responses": { "200": { "description": "OK" } } }
+    },
+    "/inventories/{id}/locators": {
+      "post": { "summary": "Create locator", "security": [{ "bearerAuth": [] }], "responses": { "201": { "description": "Created" } } }
+    },
+    "/inventories/{id}/locators/{locatorId}": {
+      "patch": { "summary": "Update locator", "security": [{ "bearerAuth": [] }], "responses": { "200": { "description": "OK" } } },
+      "delete": { "summary": "Delete locator", "security": [{ "bearerAuth": [] }], "responses": { "200": { "description": "OK" } } }
+    },
+    "/locators/{token}": {
+      "get": { "summary": "Resolver locator", "responses": { "200": { "description": "OK" } } }
+    },
+    "/public/inventories/{token}": {
+      "get": { "summary": "Inventario público", "responses": { "200": { "description": "OK" } } }
+    },
+    "/public/locators/{token}": {
+      "get": { "summary": "Locator público", "responses": { "200": { "description": "OK" } } }
+    },
+    "/public/items/{token}": {
+      "patch": { "summary": "Editar item público", "responses": { "200": { "description": "OK" } } }
     }
   }
 }

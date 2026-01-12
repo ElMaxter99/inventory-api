@@ -1,7 +1,7 @@
 version: '3.8'
 services:
   mongo:
-    image: mongo:6
+    image: mongo:8.0
     restart: always
     volumes:
       - mongo-data:/data/db
@@ -9,13 +9,8 @@ services:
       - "27017:27017"
   app:
     build: .
-    environment:
-      - NODE_ENV=development
-      - PORT=4000
-      - MONGO_URI=mongodb://mongo:27017/inventory-api
-      - JWT_ACCESS_SECRET=replace_this
-      - JWT_REFRESH_SECRET=replace_this_too
-      - UPLOAD_DIR=/app/uploads
+    env_file:
+      - .env
     ports:
       - "4000:4000"
     depends_on:
@@ -23,5 +18,7 @@ services:
     volumes:
       - .:/app
       - ./uploads:/app/uploads
+      - app-node-modules:/app/node_modules
 volumes:
   mongo-data:
+  app-node-modules:

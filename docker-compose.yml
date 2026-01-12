@@ -23,5 +23,7 @@ services:
     volumes:
       - .:/app
       - ./uploads:/app/uploads
+      - app-node-modules:/app/node_modules
 volumes:
   mongo-data:
+  app-node-modules:

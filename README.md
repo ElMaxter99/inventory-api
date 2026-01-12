@@ -1,6 +1,6 @@
 # Inventory API
 
-API REST para inventariar cosas de casa. Node.js + Express + MongoDB + TypeScript.
+API REST para inventariar cosas de casa. Node.js + Express + MongoDB (JavaScript).
 
 ## Quickstart
 

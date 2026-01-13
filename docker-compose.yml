@@ -8,17 +8,22 @@ services:
     ports:
       - "27017:27017"
   app:
-    build: .
+    build:
+      context: .
+      target: development
     env_file:
       - .env
     ports:
-      - "4000:4000"
+      - "${API_HOST:-0.0.0.0}:${API_PORT:-4000}:${PORT:-4000}"
+    environment:
+      PORT: "${PORT:-4000}"
+      MONGO_URI: "${MONGO_DOCKER_URI:-mongodb://mongo:27017/inventory-api}"
+      NODE_ENV: "${NODE_ENV:-development}"
     depends_on:
       - mongo
     volumes:
-      - .:/app
+      - ./:/app
+      - /app/node_modules
       - ./uploads:/app/uploads
-      - app-node-modules:/app/node_modules
 volumes:
   mongo-data:
-  app-node-modules:

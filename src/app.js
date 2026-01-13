@@ -2,10 +2,10 @@ const express = require("express");
 const helmet = require("helmet");
 const cors = require("cors");
 const rateLimit = require("express-rate-limit");
-const pinoHttp = require("pino-http");
+const morgan = require("morgan");
 const path = require("path");
 const config = require("./config");
-const logger = require("./utils/logger");
+const { stream } = require("./utils/logger");
 const routes = require("./routes");
 const errorHandler = require("./middlewares/errorHandler");
 const swaggerUi = require("swagger-ui-express");
@@ -19,8 +19,15 @@ app.use(helmet());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(sanitizeRequest);
-app.use(cors({ origin: config.corsOrigin }));
-app.use(pinoHttp({ logger }));
+const corsOptions = {
+  origin: config.corsOrigin,
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+};
+app.use(cors(corsOptions));
+app.options("*", cors(corsOptions));
+app.use(morgan("combined", { stream }));
 const uploadPath = path.resolve(process.cwd(), config.uploadDir);
 fs.mkdirSync(uploadPath, { recursive: true });
 app.use("/uploads", express.static(uploadPath));

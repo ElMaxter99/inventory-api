@@ -1,9 +1,20 @@
-#!/usr/bin/env bash
-set -euo pipefail
+#!/bin/bash
+# ==================================================
+# ♻️  RestartInventory API (Docker)
+# ==================================================
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-REPO_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
+set -e
 
-cd "${REPO_ROOT}"
+echo "� Reiniciando contenedores de Inventory API..."
 
-docker-compose down
+# Ir al directorio del proyecto
+cd "$(dirname "$0")/.." || exit 1
+
+# Detener los contenedores (sin eliminar datos)
+docker compose down
+
+# Iniciar nuevamente en modo background
+docker compose up -d
+
+echo "✅ Aplicación reiniciada correctamente."
+docker compose ps

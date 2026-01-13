@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const config = require("../config");
-const logger = require("../utils/logger");
+const { logger } = require("../utils/logger");
 
 async function connectMongoose() {
   try {

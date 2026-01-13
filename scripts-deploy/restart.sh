@@ -18,3 +18,6 @@ docker compose up -d
 
 echo "✅ Aplicación reiniciada correctamente."
 docker compose ps
+
+echo "✅ Aplicación reiniciada correctamente."
+docker compose ps

@@ -4,11 +4,17 @@ const { connectMongoose } = require("./db/mongoose");
 const { logger } = require("./utils/logger");
 
 process.on("unhandledRejection", (reason) => {
-  logger.error({ err: reason }, "Unhandled promise rejection");
+  logger.error("Unhandled promise rejection", {
+    error: reason,
+    stack: reason instanceof Error ? reason.stack : undefined,
+  });
 });
 
 process.on("uncaughtException", (err) => {
-  logger.error({ err }, "Uncaught exception");
+  logger.error("Uncaught exception", {
+    error: err,
+    stack: err instanceof Error ? err.stack : undefined,
+  });
   process.exit(1);
 });
 

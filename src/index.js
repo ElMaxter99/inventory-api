@@ -1,7 +1,7 @@
 const app = require("./app");
 const config = require("./config");
 const { connectMongoose } = require("./db/mongoose");
-const logger = require("./utils/logger");
+const { logger } = require("./utils/logger");
 
 process.on("unhandledRejection", (reason) => {
   logger.error({ err: reason }, "Unhandled promise rejection");

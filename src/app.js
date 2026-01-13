@@ -19,7 +19,14 @@ app.use(helmet());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(sanitizeRequest);
-app.use(cors({ origin: config.corsOrigin }));
+const corsOptions = {
+  origin: config.corsOrigin,
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+};
+app.use(cors(corsOptions));
+app.options("*", cors(corsOptions));
 app.use(morgan("combined", { stream }));
 const uploadPath = path.resolve(process.cwd(), config.uploadDir);
 fs.mkdirSync(uploadPath, { recursive: true });

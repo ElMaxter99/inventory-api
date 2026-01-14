@@ -21,7 +21,6 @@ const {
 } = require("../validators/zone.validator");
 
 const router = Router({ mergeParams: true });
-
 router.post(
   "/",
   requireAuth,
